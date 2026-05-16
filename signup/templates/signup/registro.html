@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro — El Diario Digital</title>
+  <meta name="description" content="Crea tu cuenta en El Diario Digital y comienza a publicar artículos.">
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'lista_articulos' %}" class="navbar-brand">
+        <span class="brand-dot"></span> El Diario Digital
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'login' %}" class="btn btn-outline">👤 Iniciar sesión</a>
+      </div>
+    </div>
+  </nav>
+
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">📰 El Diario Digital</div>
+        <h1>📝 Crear cuenta</h1>
+        <p>Únete y comienza a publicar</p>
+      </div>
+      <div class="auth-body">
+        <form method="post" id="form-registro">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <ul class="error-list">
+                  {% for error in field.errors %}
+                    <li>⚠️ {{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              {% if field.help_text %}
+                <small style="color:#7a8fa6; font-size:0.78rem; display:block; margin-top:0.25rem;">{{ field.help_text }}</small>
+              {% endif %}
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success btn-lg" style="width:100%; justify-content:center; margin-top:0.5rem;">
+            ✅ Crear cuenta
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          ¿Ya tienes cuenta? <a href="{% url 'login' %}">👤 Iniciar sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    &copy; 2024 El Diario Digital
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar: {{ articulo.titulo }} — El Diario Digital</title>
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'lista_articulos' %}" class="navbar-brand">
+        <span class="brand-dot"></span> El Diario Digital
+      </a>
+      <div class="navbar-links">
+        <span class="navbar-user">👤 {{ user.username }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-outline">🚪 Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="breadcrumb">
+      <a href="{% url 'lista_articulos' %}">🏠 Inicio</a>
+      <span>›</span>
+      <a href="{% url 'detalle_articulo' articulo.pk %}">{{ articulo.titulo|truncatechars:40 }}</a>
+      <span>›</span>
+      <span>Editar</span>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <h1>✏️ Editar Artículo</h1>
+        <p>Modifica el contenido de tu publicación</p>
+      </div>
+      <div class="form-card-body">
+        <form method="post" id="form-editar-articulo">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <ul class="error-list">
+                  {% for error in field.errors %}
+                    <li>⚠️ {{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          {% endfor %}
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success btn-lg">💾 Guardar cambios</button>
+            <a href="{% url 'detalle_articulo' articulo.pk %}" class="btn btn-secondary btn-lg">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2024 El Diario Digital
+  </footer>
+
+</body>
+</html>

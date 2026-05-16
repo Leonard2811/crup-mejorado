@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión — El Diario Digital</title>
+  <meta name="description" content="Inicia sesión en El Diario Digital para publicar y gestionar artículos.">
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'lista_articulos' %}" class="navbar-brand">
+        <span class="brand-dot"></span> El Diario Digital
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'registro' %}" class="btn btn-primary">📝 Registrarse</a>
+      </div>
+    </div>
+  </nav>
+
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">📰 El Diario Digital</div>
+        <h1>👤 Iniciar Sesión</h1>
+        <p>Accede a tu cuenta para publicar</p>
+      </div>
+      <div class="auth-body">
+        <form method="post" id="form-login">
+          {% csrf_token %}
+          {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+          {% endif %}
+
+          <div class="form-group">
+            <label for="id_username">Usuario</label>
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Tu nombre de usuario" required autofocus>
+          </div>
+
+          <div class="form-group">
+            <label for="id_password">Contraseña</label>
+            <input type="password" name="password" id="id_password" class="form-control" placeholder="Tu contraseña" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%; justify-content:center; margin-top:0.5rem;">
+            🔑 Entrar
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          ¿No tienes cuenta? <a href="{% url 'registro' %}">📝 Regístrate gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    &copy; 2024 El Diario Digital
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ articulo.titulo }} — El Diario Digital</title>
+  <meta name="description" content="{{ articulo.contenido|truncatechars:155 }}">
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'lista_articulos' %}" class="navbar-brand">
+        <span class="brand-dot"></span> El Diario Digital
+      </a>
+      <div class="navbar-links">
+        {% if user.is_authenticated %}
+          <span class="navbar-user">👤 {{ user.username }}</span>
+          <a href="{% url 'crear_articulo' %}" class="btn btn-accent">➕ Nuevo artículo</a>
+          <a href="{% url 'logout' %}" class="btn btn-outline">🚪 Salir</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline">👤 Iniciar sesión</a>
+          <a href="{% url 'registro' %}" class="btn btn-primary">📝 Registrarse</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- MENSAJES -->
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <main class="main-content">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <a href="{% url 'lista_articulos' %}">🏠 Inicio</a>
+      <span>›</span>
+      <span>{{ articulo.titulo|truncatechars:50 }}</span>
+    </div>
+
+    <!-- ARTÍCULO -->
+    <article class="detalle-card">
+      <div class="detalle-header">
+        <h1>{{ articulo.titulo }}</h1>
+        <div class="detalle-meta">
+          <span>✍️ {{ articulo.autor.username }}</span>
+          <span>🗓️ {{ articulo.fecha_creacion|date:"d \d\e F \d\e Y" }}</span>
+          <span>🕐 {{ articulo.fecha_creacion|time:"H:i" }}</span>
+        </div>
+      </div>
+
+      <div class="detalle-body">
+        <div class="detalle-contenido">{{ articulo.contenido }}</div>
+      </div>
+
+      <div class="detalle-actions">
+        <a href="{% url 'lista_articulos' %}" class="btn btn-secondary">← Volver</a>
+        {% if user.is_authenticated and user == articulo.autor %}
+          <a href="{% url 'editar_articulo' articulo.pk %}" class="btn btn-primary">✏️ Editar</a>
+          <a href="{% url 'eliminar_articulo' articulo.pk %}" class="btn btn-danger">🗑️ Eliminar</a>
+        {% endif %}
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2024 El Diario Digital · Todos los derechos reservados
+  </footer>
+
+</body>
+</html>

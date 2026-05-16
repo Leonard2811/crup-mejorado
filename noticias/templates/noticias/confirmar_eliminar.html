@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliminar Artículo — El Diario Digital</title>
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'lista_articulos' %}" class="navbar-brand">
+        <span class="brand-dot"></span> El Diario Digital
+      </a>
+      <div class="navbar-links">
+        <span class="navbar-user">👤 {{ user.username }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-outline">🚪 Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <div class="breadcrumb">
+      <a href="{% url 'lista_articulos' %}">🏠 Inicio</a>
+      <span>›</span>
+      <a href="{% url 'detalle_articulo' articulo.pk %}">{{ articulo.titulo|truncatechars:40 }}</a>
+      <span>›</span>
+      <span>Eliminar</span>
+    </div>
+
+    <div class="confirm-card">
+      <div class="confirm-body">
+        <div class="confirm-icon">🗑️</div>
+        <h2>¿Eliminar artículo?</h2>
+        <p>Estás a punto de eliminar permanentemente:</p>
+        <p class="confirm-title">"{{ articulo.titulo }}"</p>
+        <p style="margin-top:0.5rem; font-size:0.85rem;">Esta acción no se puede deshacer.</p>
+
+        <div class="confirm-actions">
+          <form method="post" id="form-eliminar-articulo" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg">🗑️ Sí, eliminar</button>
+          </form>
+          <a href="{% url 'detalle_articulo' articulo.pk %}" class="btn btn-secondary btn-lg">Cancelar</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2024 El Diario Digital
+  </footer>
+
+</body>
+</html>
